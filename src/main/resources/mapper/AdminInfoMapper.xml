@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yc.springboot.mapper.AdminInfoMapper">
+    <select id="findAll" resultType="AdminInfo">
+        select aid, aname, tel from adminInfo
+    </select>
+
+    <insert id="add" parameterType="AdminInfo">
+        insert into admininfo values (0, #{aname}, password(#{pwd}), #{tel})
+    </insert>
+
+    <select id="login" parameterType="AdminInfo" resultType="AdminInfo">
+        select  aid, aname, pwd, tel from admininfo where (aname = #{aname} or tel = #{aname}) and  pwd = password(#{pwd})
+    </select>
+
+    <update id="updatePwd" parameterType="int">
+        update admininfo set pwd = password(right(tel, 6)) where aid = #{_parameter}
+    </update>
+</mapper>

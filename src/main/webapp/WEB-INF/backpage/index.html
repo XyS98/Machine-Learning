@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>随手帮后台</title>
+  <link rel="stylesheet" href="../../layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">随手帮</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+	<li class="layui-nav-item"><a href="javascript:changepage('WorkItemMannner.html');">职业信息</a></li>
+	  <li class="layui-nav-item"><a href="javascript:changepage('TaskManner.html');">任务</a></li>
+	  <li class="layui-nav-item"><a href="javascript:changepage('menberManner.html');">用户</a></li>
+
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item"><a href="">退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+    
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test" id="nav-tree">
+       <!--  <li class="layui-nav-item">
+          <a class="" href="javascript:;">所有商品</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:changepage();" >列表一</a></dd>
+            <dd><a href="javascript:;">列表二</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">解决方案</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">列表一</a></dd>
+            <dd><a href="javascript:;">列表二</a></dd>
+          </dl>
+        </li>
+        -->
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body" id="main-context">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">内容主体区域</div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    欢迎使用随手帮
+  </div>
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery.js"></script>
+<script src="../../layui/lay/modules/laypage.js"></script>
+<script src="../../layer/layer.js"></script>
+<script src="../../layui/lay/modules/table.js"></script>
+<script>
+
+function changepage(page) {
+	var str = "";
+	var element = layui.element;
+	if(page == "TaskManner.html") {
+		
+		str += "<li class='layui-nav-item'><a href='javascript:changepage(\"addWorksType.html\");'>添加工作类型</a></li>";
+		str += "<li class='layui-nav-item'><a href='javascript:changepage(\"addworksItem.html\");'>添加具体工作类型</a></li>";	
+		$("#nav-tree").html("").append($(str));
+	} else if(page == "menberManner.html") {
+		$("#nav-tree").html("").append($(str));
+	} else if(page == "WorkItemMannner.html") {
+      
+	
+		str += "<li class='layui-nav-item'><a class='' href='javascript:;'>工作类型</a>";
+		str += "<dl class='layui-nav-child'><dd><a href='javascript:changepage(\"WorkTypeManner.html\");' >查看工作类型</a></dd>";
+		str += "<dd><a href='javascript:changepage(\"addWorksType.html\");'>添加工作类型</a></dd></dl></li> <li class='layui-nav-item'>";
+		str += "<a href='javascript:;'>具体工作类型</a><dl class='layui-nav-child'>";
+		str += "<dd><a href='javascript:changepage(\"WorkItemMannner.html\");'>查看具体工作类型</a></dd><dd><a href='javascript:changepage(\"addworksItem.html\");'>添加具体工作类型</a></dd></dl></li>";
+		
+		$("#nav-tree").html("").append($(str));
+		
+		
+		
+	}
+	$("#main-context").load(page);
+	element.render('nav');
+};
+
+
+layui.use('element', function(){
+	  var element = layui.element;
+	  
+	  //一些事件监听
+	  element.on('tab(demo)', function(data){
+	    console.log(data);
+	  });
+	});
+</script>
+</body>
+</html>

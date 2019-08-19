@@ -24,4 +24,32 @@ public class Industry {
     this.indname = indname;
   }
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Industry)) return false;
+
+    Industry industry = (Industry) o;
+
+    if (indno != industry.indno) return false;
+    return indname != null ? indname.equals(industry.indname) : industry.indname == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = indno;
+    result = 31 * result + (indname != null ? indname.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Industry{" +
+            "indno=" + indno +
+            ", indname='" + indname + '\'' +
+            '}';
+  }
+
+
 }

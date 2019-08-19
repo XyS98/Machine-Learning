@@ -54,4 +54,41 @@ public class Messages {
     this.chatterB = chatterB;
   }
 
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Messages)) return false;
+
+    Messages messages = (Messages) o;
+
+    if (mesno != messages.mesno) return false;
+    if (sessionId != messages.sessionId) return false;
+    if (chatterA != messages.chatterA) return false;
+    if (chatterB != messages.chatterB) return false;
+    return content != null ? content.equals(messages.content) : messages.content == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = mesno;
+    result = 31 * result + sessionId;
+    result = 31 * result + (content != null ? content.hashCode() : 0);
+    result = 31 * result + chatterA;
+    result = 31 * result + chatterB;
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Messages{" +
+            "mesno=" + mesno +
+            ", sessionId=" + sessionId +
+            ", content='" + content + '\'' +
+            ", chatterA=" + chatterA +
+            ", chatterB=" + chatterB +
+            '}';
+  }
+
+
 }

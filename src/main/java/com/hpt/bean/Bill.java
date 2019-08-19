@@ -9,6 +9,48 @@ public class Bill {
   private int btno;
   private String bdate;
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Bill)) return false;
+
+    Bill bill = (Bill) o;
+
+    if (mno != bill.mno) return false;
+    if (Double.compare(bill.amount, amount) != 0) return false;
+    if (btno != bill.btno) return false;
+    if (bno != null ? !bno.equals(bill.bno) : bill.bno != null) return false;
+    if (descr != null ? !descr.equals(bill.descr) : bill.descr != null) return false;
+    return bdate != null ? bdate.equals(bill.bdate) : bill.bdate == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result;
+    long temp;
+    result = bno != null ? bno.hashCode() : 0;
+    result = 31 * result + mno;
+    result = 31 * result + (descr != null ? descr.hashCode() : 0);
+    temp = Double.doubleToLongBits(amount);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + btno;
+    result = 31 * result + (bdate != null ? bdate.hashCode() : 0);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+    return "Bill{" +
+            "bno='" + bno + '\'' +
+            ", mno=" + mno +
+            ", descr='" + descr + '\'' +
+            ", amount=" + amount +
+            ", btno=" + btno +
+            ", bdate='" + bdate + '\'' +
+            '}';
+  }
+
+
 
   public String getBno() {
     return bno;

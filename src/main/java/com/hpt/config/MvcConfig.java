@@ -13,18 +13,18 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
 
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//        registry.addResourceHandler("/**").addResourceLocations("/templates");
-//        
-//        
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    	 registry.addResourceHandler("/WorkItemMannner.html").addResourceLocations("classpath:/templates/back/WorkItemMannner.html");
+        
+        
 //        /**
 //         * 原因是因为默认路径虽然是在static下，但并没有包含static 下的各个文件夹
 //         * ，因此当我们把静态文件移入这些文件夹后，spring boot就不认识了。因此，为了让spring boot认识，
 //         * 我们需要添加一个配置类来把我们自己的路径添加进去，具体代码如下
 //         */
 //        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
-//    }
+    }
     
     
 }

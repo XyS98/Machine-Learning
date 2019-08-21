@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yc.springboot.mapper.AdminInfoMapper">
+<mapper namespace="com.hpt.mapper.IAdminInfoMapper">
     <select id="findAll" resultType="AdminInfo">
         select aid, aname, tel from adminInfo
     </select>

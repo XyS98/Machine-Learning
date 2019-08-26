@@ -97,7 +97,7 @@ create table if not exists task
   tasktype   int,-- 0投标, 1 悬赏
   price      DECIMAL(10, 2),-- 成交酬金额
   taskweight int,           -- 任务权重
-  ischecked  int,           -- 0 没,> 0 有,如果有一审二审,则用1,2,3来代替 一审是敏感词的那个 数据库里有但是为0则是保存起来了
+  ischecked  int,           -- 0 没, 草稿> 0 有 1敏感词未通过,2，人工审核未通过，3，审核中， 4.审核通过任务进行中， 5 ，以完成
   constraint FK_task_memberInfo foreign key task (mno) references memberInfo (mno),
   constraint FK_task_worksItem foreign key task (wino) references worksItem (wino)
 ) ENGINE = InnoDB

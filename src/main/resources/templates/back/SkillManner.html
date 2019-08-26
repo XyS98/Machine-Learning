@@ -1,0 +1,39 @@
+    <!DOCTYPE html>
+   <html  lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+      <meta charset="utf-8">
+      <title>table模块快速使用</title>
+      <link rel="stylesheet" href="@{/layui1/css/layui.css}" media="all">
+    </head>
+    <body>
+     
+    <table id="skillTable" lay-filter="test"></table>
+    
+    <script  th:inline="none">
+    layui.use('table', function(){
+      var table = layui.table;
+      var mno = getCookie("item1");
+      if (mno == "null") {
+    	  mno = -1;
+      }
+      console.info(mno);
+      //第一个实例
+      table.render({
+        elem: '#skillTable'
+        ,height: 312
+        ,url: '/skill/finds' //数据接口
+        ,page: true //开启分页
+        ,where: {mno: mno}
+        ,cols: [[ //表头
+          {field: 'skno', title: '技能表', width:100, fixed: 'left'}
+          ,{field: 'winame', title: '工作类型', width:100} 
+        ]]
+      });
+      
+    });
+    
+  
+    </script>
+    
+    </body>
+    </html>

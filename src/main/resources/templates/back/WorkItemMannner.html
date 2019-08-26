@@ -1,0 +1,76 @@
+    <!DOCTYPE html>
+    <html  lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+      <meta charset="utf-8">
+      <title>具体工作信息管理</title>
+      <link th:href="@{/layui1/css/layui.css}" rel="stylesheet" />
+    </head>
+    <body>
+    <div class = "layui-inline">
+		<button type="button" id ="add" class="layui-btn layui-btn-fluid " onclick="addworkItem()">添加具体工作类型</button>
+    </div>
+    <div class = "layui-inline">
+		<button type="button" id ="del" class="layui-btn layui-btn-fluid " onclick="delworks()">删除改工作类型</button>
+    </div>
+     <div>
+	    <table id="workItemTable" lay-filter="test"></table>
+     </div>
+     
+     <script  th:inline="none">
+    layui.use('table', function(){
+    var table = layui.table;
+    indno = getCookie("item1");
+    wno = getCookie("item2");
+    if( indno == "null" ) {
+    	indno = -1;
+    	$("#del").css("display","none");
+    }
+    if( wno == "null" ) {
+    	wno = -1;
+    	$("#add").css("display","none");// 在没有通过旁边的按键时候，不显示按键
+    }
+      table.render({
+        elem: '#workItemTable'
+        ,height: 312
+        ,url: '/workItem/finds' //数据接口
+        ,page: true //开启分页
+        ,where: {indno: indno, wno: wno}
+        ,cols: [[ //表头
+          {field: 'wino', title: '具体工作类型表', width:200, sort: true, fixed: 'left'}
+          ,{field: 'winame', title: '具体工作类型', width:200}
+          ,{field: 'wname', title: '工作类型', width:200}
+          ,{field: 'indname', title: '行业类型', width:200}
+          ,{fixed: 'right', width:150, align:'center', toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+        ]]
+      });
+      
+      table.on('tool(test)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+    	  var data = obj.data; //获得当前行数据
+    	  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+    	  var tr = obj.tr; //获得当前行 tr 的DOM对象
+    	  if(layEvent === 'detail'){ //查看
+    	    //do somehing
+    	  } else if(layEvent === 'del'){ //删除
+    	    layer.confirm('真的删除该具体工作类', function(index){
+    	      $.post("/workItem/del", {wino:obj.data.wino}, function(data){
+    	    	  data = parseInt($.trim(data));
+    	    	  if (data > 0) {
+    	    		  obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+    	    	      layer.close(index);
+    	    	      //向服务端发送删除指令 
+    	    	  }else {
+    	    		  layui.msg("删除失败");
+    	    	  }
+    	      },"text");
+    	    });
+    	  } 
+    	});
+    });
+   
+    </script>
+    <script type="text/html" id="barDemo">
+  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+ 
+    </body>
+    </html>

@@ -72,4 +72,3 @@ logging:
       example:
         demo:
           mapper: debug
-          

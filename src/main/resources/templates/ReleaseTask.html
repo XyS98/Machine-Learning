@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<link th:href="@{/layui1/css/layui.css}" rel="stylesheet" />
+</head>
+
+<body class="layui-layout-body">
+<form class="layui-form" action="" lay-filter="formTaskDetail">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">简介：</label>
+    <div class="layui-input-block">
+      <input type="text" name="title" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">职业选择</label>
+    <div class="layui-input-block"  >
+    	<select name='industry' lay-verify='required'  lay-filter='industry' id = "industry">
+    	</select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">工作类型选择</label>
+    <div class="layui-input-block"  >
+    	<select name='works' lay-verify='required'  lay-filter='works' id = "works">
+    	</select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">具体工作类型选择</label>
+    <div class="layui-input-block"  >
+    	<select name='workItem' lay-verify='required'  lay-filter='workItem' id = "workItem" >
+    	</select>
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">任务详情：</label>
+    <div class="layui-input-block">
+      <textarea name="descr" id="descr" placeholder="" class="layui-textarea"></textarea>
+    </div>
+  </div>
+    <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">价格：</label>
+    <div class="layui-input-block">
+      <input type="text" name="price" id="price" placeholder="" class="layui-textarea"></textarea>
+    </div>
+  </div>
+    <div class="layui-form-item">
+    <label class="layui-form-label">单选框</label>
+    <div class="layui-input-block">
+      <input type="radio" name="sex" value="0" title="悬赏">
+      <input type="radio" name="sex" value="1" title="投标" checked>
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+  <label class="layui-form-label">图片：</label>
+    <input type="file" name="pics" />
+<!-- 条目中可以是任意内容，如：<img src=""> -->
+  </div>
+  
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">附件：</label>
+    <input type="file" name="file" />
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" id="pass" lay-submit lay-filter="pass">上传</button>
+      <button class="layui-btn" id="nopass" lay-submit lay-filter="nopass">保存</button>
+    </div>
+  </div>
+</form>
+ <script th:src="@{/js/jquery.js}"></script>
+  <script th:src="@{/layui1/layui.js}"></script>
+  <script th:src="@{/layui1/lay/modules/element.js}"></script>
+  <script th:src="@{/js/cookie.js}"></script>
+  <script th:src="@{/js/backjs.js}"></script>
+   <script th:src="@{/js/echarts.min.js}"></script>
+   <script th:src="@{/layui1/lay/modules/carousel.js}"></script>
+   <script th:src="@{/layui1/lay/modules/form.js}"></script>
+<script>
+//Demo
+layui.use('form', function(){
+	var form = layui.form;
+	select_industry();
+ 
+	//在当前局域下下取消jquary的异步性，不然。。。 一些参数会因为异步而取不到
+	$.ajaxSetup({  
+	    async : false //取消异步  
+	}); 
+	
+	//监听select选择
+	  form.on('select(industry)', function(data){
+	    select_work(data.value);
+	  });    
+	//监听select选择
+	  form.on('select(works)', function(data){
+		  select_workItem(data.value);
+	  }); 
+	  
+	 // $('input:text').attr("readonly","readonly");//设为只读
+	 // $('#descr').attr("readonly","readonly");//设为只读
+	  //监听提交
+	form.on('submit(pass)', function(data){
+    	layer.msg(JSON.stringify(data.field));
+    
+	    $.post("/task/pass",data,function(data){
+	    	var data = parseInt($.trim(data));
+	    	if (data < 0 ) {
+	    		layer.alert('失败');
+	    	} else {
+	    		layer.alert('成功');
+	    	}
+	  });
+	    return false;
+  });
+	form.on('submit(nopass)', function(data){
+    	layer.msg(JSON.stringify(data.field));
+    
+	    $.post("/task/nopass",{tno:tno},function(data){
+	    	var data = parseInt($.trim(data));
+	    	if (data < 0 ) {
+	    		layer.alert('失败');
+	    	} else {
+	    		layer.alert('成功');
+	    	}
+	  });
+	    return false;
+  });
+	    
+  var carousel = layui.carousel;
+  //建造实例
+  carousel.render({
+    elem: '#img'
+    ,width: '100%' //设置容器宽度
+    ,arrow: 'always' //始终显示箭头
+    ,anim: 'fade' //切换动画方式
+    ,autoplay: "false"
+  });
+  
+  carousel.on('change(img)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+	  console.log(obj.index); //当前条目的索引
+	  console.log(obj.prevIndex); //上一个条目的索引
+	  console.log(obj.item); //当前条目的元素对象
+	});     
+});
+
+function exportFile(){     
+    var form=$("<form>"); // 动态的创建form表达来想服务端提交参数    
+    filePath = "fdfd";
+    var inputFileName=$("<input type='text' name = 'pFileName' value='"+filePath+"' />");
+	//创建要提交的参数
+	var fileName=$("#fileName").val();
+    inputFileName.attr("value", fileName);
+	//注入参数到表单
+    form.append(inputFileName);
+	
+    form.attr("style","display:none");
+    form.attr("target","");
+    form.attr("method","post");//提交方式为post
+    form.attr("action","/downloadFile");//定义action
+    
+    $("body").append(form);
+    form.submit();        
+}
+
+
+//重新渲染表单函数
+function renderForm() {
+  layui.use('form', function() {
+      var form = layui.form; //高版本建议把括号去掉，有的低版本，需要加()
+      form.render();
+  });
+}
+
+function select_industry() {
+	$.ajaxSetup({  
+		async : false //取消异步  
+	});
+	var str="";
+	$.post("../industry/findAll", {}, function(data){
+		str +="<option value='0'></option>";
+		$.each(data,function(i, val){
+			str +="<option value='"+val.indno+"'>"+val.indname+"</option>";
+				});
+			$("#industry").html("").append($(str));
+			renderForm();
+			},"json");
+}
+
+function select_work(indno) {
+	$.ajaxSetup({  
+		async : false //取消异步  
+	});
+	var str="";
+	$.post("../works/findAll", {indno:indno}, function(data){
+		str +="<option value='0'></option>";
+		$.each(data,function(i, val){
+			str +="<option value='"+val.wno+"'>"+val.wname+"</option>";
+				});
+			$("#works").html("").append($(str));
+			renderForm();
+			},"json");
+}
+function select_workItem(wno) {
+	$.ajaxSetup({  
+		async : false //取消异步  
+	});
+	var str="";
+	$.post("../workItem/findAll", {wno: wno}, function(data){
+		str +="<option value='0'></option>";
+		$.each(data,function(i, val){
+			str +="<option value='"+val.wino+"'>"+val.winame+"</option>";
+				});
+			$("#workItem").html("").append($(str));
+			renderForm();
+			},"json");
+}
+</script>
+</body>
+</html>

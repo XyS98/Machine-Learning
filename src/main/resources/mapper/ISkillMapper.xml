@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hpt.mapper.ISkillMapper">
+    <select id="findcount" resultType="int"  >
+       select count(sk.mno)  from skill sk, memberInfo mem, worksItem wi where
+       sk.mno = mem.mno and sk.wino = wi.wino 
+       <if test="mno!=null and mno!=''">
+        and sk.mno = #{mno}
+    </if >
+    </select>
+    
+     <!-- 用了MySQL的一个有趣的东西来给查询（包括条件查询出来的data）一个完整的编号
+     例子 select (@id:= @id + 1) as id from (select @id := 0) b
+    相当于建造了一个暂时的有一个自增的id的 b 表  
+    然后用parameter 里的类来 放 （页数-1）*每页数据数，和页数*每页数据数来实现分页查询
+    -->
+     <select id="finds" resultType="Skill" parameterType="Skill" >
+select id, mno, skno, wino, nickName, winame from(
+    select (@id:= @id + 1) as id, mno, skno, wino, nickName, winame from (select @id := 0) b,
+(select sk.mno, sk.skno, sk.wino, nickName, winame from skill sk, memberInfo mem, worksItem wi where
+       sk.mno = mem.mno and sk.wino = wi.wino 
+        <if test="mno!=null and mno!=''">
+        and sk.mno = #{mno}
+    </if >
+       ) tab) tab1 where (id between #{skno} and #{wino})
+
+;
+
+    </select>
+    
+    
+</mapper>

@@ -15,7 +15,7 @@
 	<li class="layui-nav-item"><a href="javascript:changepage('WorkItemMannner',null,null);">职业信息</a></li>
 	  <li class="layui-nav-item"><a href="javascript:changepage('TaskManner',1,null);">任务</a></li>
 	  <li class="layui-nav-item"><a href="javascript:changepage('MenberManner',null,null);">用户</a></li>
-
+	  <li class="layui-nav-item"><a href="javascript:changepage('BillShow',null,null);">资金</a></li>
     </ul>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item"><a href="">退了</a></li>
@@ -61,8 +61,11 @@
   <script th:src="@{/layui1/lay/modules/element.js}"></script>
   <script th:src="@{/js/cookie.js}"></script>
   <script th:src="@{/js/backjs.js}"></script>
+   <script th:src="@{/js/echarts.min.js}"></script>
+   <script th:src="@{/layui1/lay/modules/carousel.js}"></script>
 <script>
 layui.use('element', function(){
+	$("#main-context").load("@{/backjump/test}");
 	  var element = layui.element;
 	  //一些事件监听
 	  element.on('tab(demo)', function(data){

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<link th:href="@{/layui1/css/layui.css}" rel="stylesheet" />
+</head>
+
+<body class="layui-layout-body">
+<form class="layui-form" action="" lay-filter="formTaskDetail">
+  <div class="layui-form-item">
+    <label class="layui-form-label">雇主：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="nickName" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">任务编号：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="tno" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">投标/悬赏方式：</label>
+    <div class="layui-input-inline">
+      <input type="text" name="isselected" required lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">任务详情：</label>
+    <div class="layui-input-block">
+      <textarea name="text" id="descr" placeholder="" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  
+  <div class="layui-form-item layui-form-text">
+  <label class="layui-form-label">图片：</label>
+    <div class="layui-carousel" id="img">
+  <div carousel-item>
+    <div>条目1</div>
+    <div>条目2</div>
+    <div>条目3</div>
+    <div>条目4</div>
+    <div>条目5</div>
+  </div>
+</div>
+<!-- 条目中可以是任意内容，如：<img src=""> -->
+  </div>
+  
+  <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">附件：</label>
+    <div class="layui-input-block">
+      <a href="javascript:exportFile();" class="layui-icon layui-icon-download-circle " style="font-size: 30px; color: #1E9FFF;"></a>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="formDemo">通过</button>
+      <button type="reset" class="layui-btn layui-btn-primary">驳回</button>
+    </div>
+  </div>
+</form>
+<script>
+//Demo
+layui.use('form', function(){
+  var form = layui.form;
+  var sbno = getCookie("item1");
+
+	  
+	  $('input:text').attr("readonly","readonly");//设为只读
+	  $('#descr').attr("readonly","readonly");//设为只读
+	  //监听提交
+	  form.on('submit(formDemo)', function(data){
+	    layer.msg(JSON.stringify(data.field));
+	    return false;
+	  });
+	  
+  $.post("/selected/findOne",{sbno:sbno},function(data){
+	  form.val("formTaskDetail", {
+		  "nickName": data.nickName
+		  ,"tno": data.tno
+		  ,"text": data.text
+		  ,"isselected": data.isselected
+			
+		  });
+  },"json");
+  
+  var carousel = layui.carousel;
+  //建造实例
+  carousel.render({
+    elem: '#img'
+    ,width: '100%' //设置容器宽度
+    ,arrow: 'always' //始终显示箭头
+    ,anim: 'fade' //切换动画方式
+    ,autoplay: "false"
+  });
+  
+  carousel.on('change(img)', function(obj){ //test1来源于对应HTML容器的 lay-filter="test1" 属性值
+	  console.log(obj.index); //当前条目的索引
+	  console.log(obj.prevIndex); //上一个条目的索引
+	  console.log(obj.item); //当前条目的元素对象
+	});     
+});
+
+function exportFile(){     
+    var form=$("<form>"); // 动态的创建form表达来想服务端提交参数    
+    filePath = "fdfd";
+    var inputFileName=$("<input type='text' name = 'pFileName' value='"+filePath+"' />");
+	//创建要提交的参数
+	var fileName=$("#fileName").val();
+    inputFileName.attr("value", fileName);
+	//注入参数到表单
+    form.append(inputFileName);
+	
+    form.attr("style","display:none");
+    form.attr("target","");
+    form.attr("method","post");//提交方式为post
+    form.attr("action","/downloadFile");//定义action
+    
+    $("body").append(form);
+    form.submit();        
+}
+</script>
+</body>
+</html>

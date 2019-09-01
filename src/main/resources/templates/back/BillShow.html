@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>layout 后台大布局 - Layui</title>
+ <link th:href="@{/layui1/css/layui.css}" rel="stylesheet" />
+</head>
+<body>
+ <!-- 引入 echarts.js -->
+    
+</head>
+<body>
+<form class="layui-form" action="">
+  <div class="layui-form-item">
+    <label class="layui-form-label">年：</label>
+    <div class="layui-input-block">
+      <select name="year" lay-verify="required" id = "year">
+		        <option value=""></option>
+		      </select>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">月：</label>
+    <div class="layui-input-block">
+      <select name="mon" lay-verify="required" id = "mon">
+        <option value=""></option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">月：</label>
+    <div class="layui-input-block">
+    	<button type="button" class="layui-btn"  onclick="find()">查询</button>
+    </div>
+  </div>
+    <div id="chart1" style="width: 80%;height: 400px;top: 50px;left: 10%;border: 3px solid #FF0000;"></div>
+
+</form>
+
+</body>
+
+
+<script type="text/javascript">
+
+layui.use('form', function(){
+	select_year();
+	  var form = layui.form;
+	  //监听提交
+	  form.on('submit(formDemo)', function(data){
+	    layer.msg(JSON.stringify(data.field));
+	    return false;
+	  });
+	});
+	function find() {
+		//渲染ECharts图表
+	    var mon = $("#mon").val();
+        var year = $("#year").val();
+        var mno = getCookie("item1");
+        if(mno =="null") {
+        	mno = -1;
+        }
+        $.post("/bill/fbyd",{year:year, mon:mon, mno:mno},function(data) {
+	       	var nums = data.length;
+	        var myday=new Array(nums);
+            var myin=new Array(nums);
+            var myout=new Array(nums);
+            
+       	    for(var i=0;i<data.length;i++){
+       		 	
+                myday[i]=data[i].day;
+                console.info(data[i].day);
+                myin[i]=data[i].inm;
+                console.info(data[i].inm);
+                myout[i]=data[i].outm;
+                console.info(data[i].outm);
+            } 
+       	 
+       	 	//图表渲染的容器对象
+            var chartContainer = document.getElementById("chart1");
+             //加载图表
+            var myChart = echarts.init(chartContainer);
+            myChart.setOption({
+                 //图表标题
+                 title: {
+                     text: year+"年"+ mon+ "月" + "资金流动表", //正标题
+                     x: "center", //标题水平方向位置
+                     //正标题样式
+                     textStyle: {
+                         fontSize:24
+                     },
+                     //副标题样式
+                     subtextStyle: {
+                         fontSize:12,
+                         color:"red"
+                     }
+             },
+             //数据提示框配置
+             tooltip: {
+                 trigger: 'axis' //触发类型，默认数据触发，见下图，可选为：'item' | 'axis' 其实就是是否共享提示框
+             },
+             //图例配置
+             legend: {
+                 data: ['收入', '支出'], //这里需要与series内的每一组数据的name值保持一致
+                 y:"bottom"
+             },
+             //工具箱配置
+             toolbox: {
+                 show: true, //是否显示工具箱
+                 feature: {
+                     mark: false, // 辅助线标志，上图icon左数1/2/3，分别是启用，删除上一条，删除全部
+                     dataView: { readOnly: false }, // 数据视图，上图icon左数8，打开数据视图
+                     magicType: ['line', 'bar'],      // 图表类型切换，当前仅支持直角系下的折线图、柱状图转换，上图icon左数6/7，分别是切换折线图，切换柱形图
+                     restore: true, // 还原，复位原始图表，上图icon左数9，还原
+                     saveAsImage: true  // 保存为图片，上图icon左数10，保存
+                 }
+             },
+             calculable: true,
+             //轴配置
+             xAxis: [
+                     {
+                         type: 'category',
+                         data: myday,
+                         name: "日"
+                     }
+                 ],
+             //Y轴配置
+             yAxis: [
+                     {
+                         type: 'value',
+                         splitArea: { show: true },
+                         name:"￥"
+                     }
+                 ],
+             //图表Series数据序列配置
+             series: [
+                     {
+                         name: '收入',
+                         type: 'line',
+                         data: myin
+                     },
+                     {
+                         name: '支出',
+                         type: 'line',
+                         data: myout
+                     }
+                 ]
+         });
+        })
+	}	
+	function renderForm() {
+	    layui.use('form', function() {
+	        var form = layui.form; //高版本建议把括号去掉，有的低版本，需要加()
+	        form.render();
+	    });
+	}
+	
+	function select_year() {
+		$.ajaxSetup({  
+			async : false //取消异步  
+		});
+		var str="";
+		$.post("../bill/findYear", {}, function(data){
+	  		str +="<option value='0'></option>";
+			$.each(data,function(i, val){
+				str +="<option value='"+val+"'>"+val+"</option>";
+	  				});
+				$("#year").html("").append($(str));
+				renderForm();
+	  			},"json");
+	}
+
+</script>
+</html>

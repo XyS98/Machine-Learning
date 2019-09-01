@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title></title>
+<link th:href="@{/layui1/css/layui.css}" rel="stylesheet" />
+</head>
+
+<body class="layui-layout-body">
+<input type="hidden" value="" id="indno">
+<form class="layui-form" action="" lay-filter="formTaskDetail">
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn" onclick="addindustry()">添加职业</button>
+    </div>
+  </div>
+  
+    <div class="layui-form-item">
+    <label class="layui-form-label">选择框</label>
+    <div class="layui-input-block"  >
+    	<select name='industry' lay-verify='required'  lay-filter='industry' id = "industry">
+    	</select>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-block">
+      <button type="button" class="layui-btn" onclick="addworks()">添加工作类型</button>
+    </div>
+  </div>
+</form>
+<script th:src="@{/js/jquery.js}"></script>
+  <script th:src="@{/layui1/layui.js}"></script>
+  <script th:src="@{/layui1/lay/modules/element.js}"></script>
+  <script th:src="@{/js/cookie.js}"></script>
+  <script th:src="@{/js/backjs.js}"></script>
+   <script th:src="@{/js/echarts.min.js}"></script>
+   <script th:src="@{/layui1/lay/modules/carousel.js}"></script>
+<script>
+//Demo
+layui.use('form', function(){
+	select_industry();
+	 var form = layui.form;
+  $('input:text').attr("readonly","readonly");//设为只读
+  $('#descr').attr("readonly","readonly");//设为只读
+  //监听提交
+  form.on('submit(formDemo)', function(data){
+    layer.msg(JSON.stringify(data.field));
+    return false;
+  });
+  
+	//监听select选择
+  form.on('select(industry)', function(data){
+    console.log(data.elem); //得到select原始DOM对象
+    console.log(data.value); //得到被选中的值
+    $("#indno").val(data.value); 
+    console.log(data.othis); //得到美化后的DOM对象
+  });      
+  
+});
+
+//重新渲染表单函数
+function renderForm() {
+    layui.use('form', function() {
+        var form = layui.form; //高版本建议把括号去掉，有的低版本，需要加()
+        form.render();
+    });
+}
+
+function select_industry() {
+	$.ajaxSetup({  
+		async : false //取消异步  
+	});
+	var str="";
+	$.post("../industry/findAll", {}, function(data){
+  		str +="<option value='0'></option>";
+		$.each(data,function(i, val){
+			str +="<option value='"+val.indno+"'>"+val.indname+"</option>";
+  				});
+			$("#industry").html("").append($(str));
+			renderForm();
+  			},"json");
+}
+
+function select_work() {
+	$.ajaxSetup({  
+		async : false //取消异步  
+	});
+	var str="";
+	$.post("../works/findAll", {indno:$("#work").val}, function(data){
+  		str +="<option value='0'></option>";
+		$.each(data,function(i, val){
+			str +="<option value='"+val.wno+"'>"+val.wname+"</option>";
+  				});
+			$("#works").html("").append($(str));
+			renderForm();
+  			},"json");
+}
+function addwork() {
+	var indno = $("#indno").val();
+	addworks(indno);
+}
+
+</script>
+</body>
+</html>

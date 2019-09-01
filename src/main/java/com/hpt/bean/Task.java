@@ -19,15 +19,20 @@ public class Task {
   private String winame;
   private String releaseTime;
   private String checkTime;
+  private String nickName;
+  
+  
 
   public Task() {
 	super();
 	// TODO Auto-generated constructor stub
 }
 
+
+
 public Task(String tno, int mno, int empno, String picloc, String docloc, int wino, String title, String descr,
-		int tasktype, double price, int taskweight, int ischecked, String winame, String releaseTime,
-		String checkTime) {
+		int tasktype, double price, int taskweight, int ischecked, String winame, String releaseTime, String checkTime,
+		String nickName) {
 	super();
 	this.tno = tno;
 	this.mno = mno;
@@ -44,15 +49,20 @@ public Task(String tno, int mno, int empno, String picloc, String docloc, int wi
 	this.winame = winame;
 	this.releaseTime = releaseTime;
 	this.checkTime = checkTime;
+	this.nickName = nickName;
 }
+
+
 
 @Override
 public String toString() {
 	return "Task [tno=" + tno + ", mno=" + mno + ", empno=" + empno + ", picloc=" + picloc + ", docloc=" + docloc
 			+ ", wino=" + wino + ", title=" + title + ", descr=" + descr + ", tasktype=" + tasktype + ", price=" + price
 			+ ", taskweight=" + taskweight + ", ischecked=" + ischecked + ", winame=" + winame + ", releaseTime="
-			+ releaseTime + ", checkTime=" + checkTime + "]";
+			+ releaseTime + ", checkTime=" + checkTime + ", nickName=" + nickName + "]";
 }
+
+
 
 @Override
 public int hashCode() {
@@ -64,6 +74,7 @@ public int hashCode() {
 	result = prime * result + empno;
 	result = prime * result + ischecked;
 	result = prime * result + mno;
+	result = prime * result + ((nickName == null) ? 0 : nickName.hashCode());
 	result = prime * result + ((picloc == null) ? 0 : picloc.hashCode());
 	long temp;
 	temp = Double.doubleToLongBits(price);
@@ -77,6 +88,8 @@ public int hashCode() {
 	result = prime * result + wino;
 	return result;
 }
+
+
 
 @Override
 public boolean equals(Object obj) {
@@ -107,6 +120,11 @@ public boolean equals(Object obj) {
 	if (ischecked != other.ischecked)
 		return false;
 	if (mno != other.mno)
+		return false;
+	if (nickName == null) {
+		if (other.nickName != null)
+			return false;
+	} else if (!nickName.equals(other.nickName))
 		return false;
 	if (picloc == null) {
 		if (other.picloc != null)
@@ -144,125 +162,196 @@ public boolean equals(Object obj) {
 	return true;
 }
 
+
+
 public String getTno() {
 	return tno;
 }
+
+
 
 public void setTno(String tno) {
 	this.tno = tno;
 }
 
+
+
 public int getMno() {
 	return mno;
 }
+
+
 
 public void setMno(int mno) {
 	this.mno = mno;
 }
 
+
+
 public int getEmpno() {
 	return empno;
 }
+
+
 
 public void setEmpno(int empno) {
 	this.empno = empno;
 }
 
+
+
 public String getPicloc() {
 	return picloc;
 }
+
+
 
 public void setPicloc(String picloc) {
 	this.picloc = picloc;
 }
 
+
+
 public String getDocloc() {
 	return docloc;
 }
+
+
 
 public void setDocloc(String docloc) {
 	this.docloc = docloc;
 }
 
+
+
 public int getWino() {
 	return wino;
 }
+
+
 
 public void setWino(int wino) {
 	this.wino = wino;
 }
 
+
+
 public String getTitle() {
 	return title;
 }
+
+
 
 public void setTitle(String title) {
 	this.title = title;
 }
 
+
+
 public String getDescr() {
 	return descr;
 }
+
+
 
 public void setDescr(String descr) {
 	this.descr = descr;
 }
 
+
+
 public int getTasktype() {
 	return tasktype;
 }
+
+
 
 public void setTasktype(int tasktype) {
 	this.tasktype = tasktype;
 }
 
+
+
 public double getPrice() {
 	return price;
 }
+
+
 
 public void setPrice(double price) {
 	this.price = price;
 }
 
+
+
 public int getTaskweight() {
 	return taskweight;
 }
+
+
 
 public void setTaskweight(int taskweight) {
 	this.taskweight = taskweight;
 }
 
+
+
 public int getIschecked() {
 	return ischecked;
 }
+
+
 
 public void setIschecked(int ischecked) {
 	this.ischecked = ischecked;
 }
 
+
+
 public String getWiname() {
 	return winame;
 }
+
+
 
 public void setWiname(String winame) {
 	this.winame = winame;
 }
 
+
+
 public String getReleaseTime() {
 	return releaseTime;
 }
+
+
 
 public void setReleaseTime(String releaseTime) {
 	this.releaseTime = releaseTime;
 }
 
+
+
 public String getCheckTime() {
 	return checkTime;
 }
 
+
+
 public void setCheckTime(String checkTime) {
 	this.checkTime = checkTime;
 }
-  
+
+
+
+public String getNickName() {
+	return nickName;
+}
+
+
+
+public void setNickName(String nickName) {
+	this.nickName = nickName;
+}
   
 }

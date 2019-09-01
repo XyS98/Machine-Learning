@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hpt.mapper.IWorksMapper">
+     <select id="findAll" resultType="Works" parameterType="Works" >
+            select wno, indno, wname from Works where indno = #{indno}
+     
+    </select>
+         <insert id="add"  parameterType="Works">
+     		insert into Works values(null,#{indno},#{wname});
+     </insert>
+     
+     <update id="del" parameterType="Works">
+    	delete from Works where wno = #{wno}
+    </update>
+</mapper>
